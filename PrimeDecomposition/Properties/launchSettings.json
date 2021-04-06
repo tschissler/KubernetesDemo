@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "PrimeDecomposition": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:80/?number=255",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:80"
+    },
+    "WSL 2": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/?number=255",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "http://localhost:5000",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "distributionName": ""
+    }
+  }
+}
