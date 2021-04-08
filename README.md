@@ -9,8 +9,8 @@ https://ubuntu.com/tutorials/how-to-kubernetes-cluster-on-raspberry-pi#1-overvie
 
 Create new user
 ```
-sudo nano /etc/hostname
-sudo hostname -F /etc/hostname
+sudo adduser k8suser
+sudo usermod -aG sudo k8suser
 ```
 
 Rename Computer
