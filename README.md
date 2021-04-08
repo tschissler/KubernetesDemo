@@ -29,7 +29,12 @@ microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:
 Install kubectl:
 ```
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl"
+mkdir -p ~/bin
+mv kubectl ~/bin
+chmod a+x ~/bin/kubectl
+echo "export PATH=$PATH:~/bin" >> ~/.bashrc
 ```
+
 
 Configure user, cluster and context:
 ```
