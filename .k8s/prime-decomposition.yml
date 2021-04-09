@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prime-decomposition
+  labels:
+    app: prime-decomposition
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prime-decomposition
+  template:
+    metadata:
+      labels:
+        app: prime-decomposition
+    spec:
+      containers:
+        - name: prime-decomposition
+          image: prime-decomposition
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 20
+            timeoutSeconds: 2
+            periodSeconds: 10
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prime-decomposition
+  labels:
+    app: prime-decomposition
+spec:
+  selector:
+    app: prime-decomposition
+  ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
