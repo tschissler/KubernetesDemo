@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  prime-decomposition:
+    container_name: prime-decomposition
+    image: "prime-decomposition"
+    build:
+      context: ./PrimeDecomposition
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    expose:
+      - "80"
+    networks:
+      - k8sdemo
+
+  number-generator:
+    container_name: number-generator
+    image: "number-generator"
+    build:
+      context: ./NumberGenerator
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - PRIME_DECOMPOSITION_URL=http://prime-decomposition
+    expose:
+      - "80"
+    ports:
+      - "4300:80"
+    networks:
+      - k8sdemo
+        
+networks:
+  k8sdemo:

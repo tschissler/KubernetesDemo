@@ -29,6 +29,14 @@ microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:
 Install kubectl:
 ```
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl"
+
+mkdir -p ~/bin
+mv kubectl ~/bin
+chmod a+x ~/bin/kubectl
+echo "export PATH=$PATH:~/bin" >> ~/.bashrc
+```
+
+=======
 ```
 
 Configure user, cluster and context:
@@ -63,7 +71,32 @@ users:
 ```
 
 
+Install Docker on head:
+```
+sudo apt-get update
+sudo apt-get install     apt-transport-https     ca-certificates     curl     gnupg     lsb-release
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo   "deb [arch=armhf signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+df -h
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+Register our custom Portainer registry with Microk8s:
+```
+vi /var/snap/microk8s/current/args/containerd-template.toml
+```
+and add:
+```
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors."a1:32000"]
+        endpoint = ["http://a1:32000"]
+```
+at the end of the file.
+=======
+
 ## Use internal registry
 https://microk8s.io/docs/registry-built-in
 
 https://microk8s.io/docs/registry-private
+
