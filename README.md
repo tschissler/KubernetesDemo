@@ -37,7 +37,6 @@ echo "export PATH=$PATH:~/bin" >> ~/.bashrc
 ```
 
 =======
-```
 
 Configure user, cluster and context:
 ```
@@ -70,7 +69,6 @@ users:
     token: REDACTED
 ```
 
-
 Install Docker on head:
 ```
 sudo apt-get update
@@ -87,12 +85,24 @@ Register our custom Portainer registry with Microk8s:
 ```
 vi /var/snap/microk8s/current/args/containerd-template.toml
 ```
+
 and add:
+
 ```
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors."a1:32000"]
         endpoint = ["http://a1:32000"]
 ```
+
 at the end of the file.
+
+## Let pods run with horizontal autoscaling
+```
+git clone https://github.com/tschissler/KubernetesDemo.git
+cd KubernetesDemo/.k8s
+kubectl apply -f .
+kubectl autoscale deployment prime-decomposition --cpu-percent=50 --min=1 --max=12
+```
+
 =======
 
 ## Use internal registry
