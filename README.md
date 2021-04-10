@@ -9,8 +9,8 @@ https://ubuntu.com/tutorials/how-to-kubernetes-cluster-on-raspberry-pi#1-overvie
 
 Create new user
 ```
-sudo nano /etc/hostname
-sudo hostname -F /etc/hostname
+sudo adduser k8suser
+sudo usermod -aG sudo k8suser
 ```
 
 Rename Computer
@@ -29,12 +29,15 @@ microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:
 Install kubectl:
 ```
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl"
+
 mkdir -p ~/bin
 mv kubectl ~/bin
 chmod a+x ~/bin/kubectl
 echo "export PATH=$PATH:~/bin" >> ~/.bashrc
 ```
 
+=======
+```
 
 Configure user, cluster and context:
 ```
@@ -67,7 +70,8 @@ users:
     token: REDACTED
 ```
 
-Install Docker on VNC host:
+
+Install Docker on head:
 ```
 sudo apt-get update
 sudo apt-get install     apt-transport-https     ca-certificates     curl     gnupg     lsb-release
@@ -89,3 +93,10 @@ and add:
         endpoint = ["http://a1:32000"]
 ```
 at the end of the file.
+=======
+
+## Use internal registry
+https://microk8s.io/docs/registry-built-in
+
+https://microk8s.io/docs/registry-private
+
