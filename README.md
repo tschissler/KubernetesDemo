@@ -65,4 +65,5 @@ users:
 
 ## Use internal registry
 https://microk8s.io/docs/registry-built-in
+
 https://microk8s.io/docs/registry-private
