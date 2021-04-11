@@ -59,3 +59,16 @@ spec:
     - name: "80"
       port: 80
       targetPort: 80
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: prime-decomposition
+spec:
+  maxReplicas: 12
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prime-decomposition
+  targetCPUUtilizationPercentage: 50
