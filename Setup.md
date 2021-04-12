@@ -17,6 +17,8 @@ sudo adduser k8suser
 sudo usermod -aG sudo k8suser
 ```
 8. Rename hostname
+
+The hostname must be lowercase
 ```bash
 sudo nano /etc/hostname
 sudo hostname -F /etc/hostname
