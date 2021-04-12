@@ -35,3 +35,9 @@ Then reboot the pi
 ```bash
 sudo reboot
 ```
+10. Do some helpful preparations
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install net-tools
+```
