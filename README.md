@@ -7,18 +7,6 @@ This application does a very simple prime-decomposition.
 Install MicroK8s on a Raspberry Pi:
 https://ubuntu.com/tutorials/how-to-kubernetes-cluster-on-raspberry-pi#1-overview
 
-Create new user
-```
-sudo adduser k8suser
-sudo usermod -aG sudo k8suser
-```
-
-Rename Computer
-```
-sudo nano /etc/hostname
-sudo hostname -F /etc/hostname
-```
-
 Enable Dashboard:
 https://microk8s.io/docs/addon-dashboard
 ```
