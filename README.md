@@ -95,13 +95,14 @@ and add:
 
 at the end of the file.
 
-## Let pods run with horizontal autoscaling
+## Let pods run
 ```
 git clone https://github.com/tschissler/KubernetesDemo.git
 cd KubernetesDemo/.k8s
 kubectl apply -f .
-kubectl autoscale deployment prime-decomposition --cpu-percent=50 --min=1 --max=12
 ```
+The command `kubectl autoscale deployment prime-decomposition --cpu-percent=50 --min=1 --max=12` is not necessary since it's already part of the Yaml configuration.
+
 
 =======
 
