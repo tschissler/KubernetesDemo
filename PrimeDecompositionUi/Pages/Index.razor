@@ -1,24 +1,29 @@
 ﻿@page "/"
 @using PrimeDecompositionUi.Data
+@using System.Threading
+@using System.Timers
 
 @inject HttpClient httpClient
 
+<h1>Enter Parameter for Prime Decomposition</h1>
 <EditForm Model="@numberGeneratorParameter">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div>
+    <div class="m-4">
         <label for="maxnumber">Max number:</label>
-        <input @bind:event="oninput" @bind="numberGeneratorParameter.MaxNumber" type="number" id="maxnumber"/>
+        <br/>
+        <InputNumber class="text-xl-center" @bind-Value="numberGeneratorParameter.MaxNumber" id="maxnumber"/>
     </div>
-    <div>
+    <div class="m-4">
         <label for="intervalinmillis">Interval in Milliseconds:</label>
-        <input @bind:event="oninput" @bind="numberGeneratorParameter.IntervalInMillis" type="number" id="intervalinmillis"/>
+        <br/>
+        <InputNumber class="text-xl-center" @bind-Value="numberGeneratorParameter.IntervalInMillis" id="intervalinmillis"/>
     </div>
 </EditForm>
-<div>
-    <button type="button" @onclick="Start">Start</button>
-    <button type="button" @onclick="Stop">Stop</button>
-    <button type="button" @onclick="Stats">Update stats</button>
+<div class="m-4">
+    <button class="btn-lg" type="button" @onclick="Start">Start</button>
+    <button class="btn-lg" type="button" @onclick="Stop">Stop</button>
+    <button class="btn-lg" type="button" @onclick="Stats">Update stats</button>
 </div>
 <div>
     @TheStats

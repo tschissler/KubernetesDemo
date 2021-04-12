@@ -2,22 +2,25 @@
   "profiles": {
     "PrimeDecompositionUi": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5002",
       "environmentVariables": {
+        "NUMBER_GENERATOR_URL": "http://localhost:5001",
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:5002",
+      "hotReloadProfile": "aspnetcore"
     },
     "Local": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "NUMBER_GENERATOR_URL": "http://localhost:5001"
+        "NUMBER_GENERATOR_URL": "http://localhost:5001",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5002"
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:5002",
+      "hotReloadProfile": "aspnetcore"
     }
   }
 }

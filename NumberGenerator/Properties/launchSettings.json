@@ -4,7 +4,8 @@
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "PRIME_DECOMPOSITION_URL": "http://localhost:5000"
       },
       "applicationUrl": "http://localhost:80"
     },
