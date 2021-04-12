@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeDecompositionTests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberGenerator", "NumberGenerator\NumberGenerator.csproj", "{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeDecompositionUi", "PrimeDecompositionUi\PrimeDecompositionUi.csproj", "{D7233970-3D57-4D81-8CD3-017FB5E3438E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7233970-3D57-4D81-8CD3-017FB5E3438E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7233970-3D57-4D81-8CD3-017FB5E3438E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7233970-3D57-4D81-8CD3-017FB5E3438E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7233970-3D57-4D81-8CD3-017FB5E3438E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,49 @@
+﻿@page "/"
+@using PrimeDecompositionUi.Data
+
+@inject HttpClient httpClient
+
+<EditForm Model="@numberGeneratorParameter">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="maxnumber">Max number:</label>
+        <input @bind:event="oninput" @bind="numberGeneratorParameter.MaxNumber" type="number" id="maxnumber"/>
+    </div>
+    <div>
+        <label for="intervalinmillis">Interval in Milliseconds:</label>
+        <input @bind:event="oninput" @bind="numberGeneratorParameter.IntervalInMillis" type="number" id="intervalinmillis"/>
+    </div>
+</EditForm>
+<div>
+    <button type="button" @onclick="Start">Start</button>
+    <button type="button" @onclick="Stop">Stop</button>
+    <button type="button" @onclick="Stats">Update stats</button>
+</div>
+<div>
+    @TheStats
+</div>
+@code
+{
+    private readonly NumberGeneratorParameter numberGeneratorParameter = new();
+    
+    private string TheStats { get; set; }
+
+    private string Url = Environment.GetEnvironmentVariable("NUMBER_GENERATOR_URL");
+
+    private async Task Start()
+    {
+        await httpClient.GetAsync($"{Url}/start?max={numberGeneratorParameter.MaxNumber}&interval={numberGeneratorParameter.IntervalInMillis}");
+    }
+
+    private async Task Stop()
+    {
+        await httpClient.GetAsync($"{Url}/stop");
+    }
+
+    private async Task Stats()
+    {
+        var response = await httpClient.GetAsync($"{Url}/stats");
+        TheStats = await response.Content.ReadAsStringAsync();
+    }
+}
