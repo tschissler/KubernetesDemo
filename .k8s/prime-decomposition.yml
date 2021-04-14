@@ -24,26 +24,26 @@ spec:
           resources:
             limits:
               memory: "128Mi"
-              cpu: "100m"
+              cpu: "1000m"
             requests:
               memory: "64Mi"
-              cpu: "50m"
+              cpu: "500m"
           ports:
             - containerPort: 80
           livenessProbe:
             httpGet:
               path: /health
               port: 80
-            initialDelaySeconds: 20
-            timeoutSeconds: 2
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 20
             failureThreshold: 1
           readinessProbe:
             httpGet:
               path: /health
               port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
             failureThreshold: 2
 ---
 apiVersion: v1
