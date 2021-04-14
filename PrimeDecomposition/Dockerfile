@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /src
-COPY . .
+COPY Dtos/ /src/Dtos/
+COPY PrimeDecomposition/ /src/PrimeDecomposition/
+WORKDIR /src/PrimeDecomposition
 RUN dotnet restore
 RUN dotnet publish "PrimeDecomposition.csproj" -c Release -o /app
 
