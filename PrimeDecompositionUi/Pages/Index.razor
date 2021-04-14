@@ -2,6 +2,7 @@
 @using PrimeDecompositionUi.Data
 @using System.Net.Http.Json
 @using Dtos
+@using MatBlazor
 
 @inject HttpClient httpClient
 
@@ -11,12 +12,18 @@
     <ValidationSummary />
     <div class="m-4">
         <label for="maxnumber">Max number:</label>
-        <br/>
-        <InputNumber class="text-xl-center" @bind-Value="_numberGeneratorParameter.MaxNumber" id="maxnumber" disabled="@_running" />
+        <br />
+        <MatSlider Discrete="true" Step="1000" EnableStep="true" Immediate="true" @bind-Value="@maxVal" TValue="long" ValueMin="0" ValueMax="50000000"></MatSlider>
+        <MatNumericUpDownField 
+                               @bind-Value=@_numberGeneratorParameter.MaxNumber
+                               Step="1000"
+                               Format="#,##0"
+                               DecimalPlaces=0>
+        </MatNumericUpDownField>
     </div>
     <div class="m-4">
         <label for="intervalinmillis">Interval in Milliseconds:</label>
-        <br/>
+        <br />
         <InputNumber class="text-xl-center" @bind-Value="_numberGeneratorParameter.IntervalInMillis" id="intervalinmillis" disabled="@_running" />
     </div>
 </EditForm>
@@ -35,6 +42,16 @@
 </div>
 @code
 {
+    private long maxVal
+    {
+        get => _numberGeneratorParameter.MaxNumber;
+        set
+        {
+            _numberGeneratorParameter.MaxNumber = value;
+            this.StateHasChanged();
+        }
+    }
+
     private readonly NumberGeneratorParameter _numberGeneratorParameter = new();
 
     private List<CallStatisticDto> Statistics { get; set; } = new();
@@ -51,13 +68,18 @@
         await UpdateStats();
     }
 
+    private void OnSliderChanged(long value)
+    {
+        maxVal = value;
+    }
+
     private async Task Start()
     {
         if (_running)
         {
             return;
         }
-        
+
         await httpClient.GetAsync($"{_url}/start?max={_numberGeneratorParameter.MaxNumber}&interval={_numberGeneratorParameter.IntervalInMillis}");
         _running = true;
         _timer = new System.Timers.Timer(500);

@@ -1,4 +1,5 @@
 using System.Net.Http;
+using MatBlazor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,8 @@ namespace PrimeDecompositionUi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddTransient<HttpClient>();
+            services.AddMatBlazor();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
