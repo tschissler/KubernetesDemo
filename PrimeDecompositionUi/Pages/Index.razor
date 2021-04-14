@@ -11,20 +11,45 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="m-4">
-        <label for="maxnumber">Max number:</label>
+        <label>Max number:</label>
         <br />
-        <MatSlider Discrete="true" Step="1000" EnableStep="true" Immediate="true" @bind-Value="@maxVal" TValue="long" ValueMin="0" ValueMax="50000000"></MatSlider>
+        <MatSlider 
+                    Discrete="true" 
+                    Step="1000" 
+                    EnableStep="true" 
+                    Immediate="true" 
+                    @bind-Value="@maxVal" 
+                    TValue="long" 
+                    ValueMin="0" 
+                    ValueMax="50000000"
+                    Disabled="@_running"/>
         <MatNumericUpDownField 
                                @bind-Value=@_numberGeneratorParameter.MaxNumber
                                Step="1000"
                                Format="#,##0"
-                               DecimalPlaces=0>
-        </MatNumericUpDownField>
+                               DecimalPlaces=0
+                               Disabled="@_running"/>
+        
     </div>
     <div class="m-4">
         <label for="intervalinmillis">Interval in Milliseconds:</label>
         <br />
-        <InputNumber class="text-xl-center" @bind-Value="_numberGeneratorParameter.IntervalInMillis" id="intervalinmillis" disabled="@_running" />
+                <MatSlider 
+                    Discrete="true" 
+                    Step="10" 
+                    EnableStep="true" 
+                    Immediate="true" 
+                    @bind-Value="@intervalVal" 
+                    TValue="long" 
+                    ValueMin="0" 
+                    ValueMax="1000"
+                    Disabled="@_running"/>
+        <MatNumericUpDownField 
+                               @bind-Value=@_numberGeneratorParameter.IntervalInMillis
+                               Step="10"
+                               Format="#,##0"
+                               DecimalPlaces=0
+                               Disabled="@_running"/>
     </div>
 </EditForm>
 <div class="m-4">
@@ -48,6 +73,16 @@
         set
         {
             _numberGeneratorParameter.MaxNumber = value;
+            this.StateHasChanged();
+        }
+    }
+
+    private long intervalVal
+    {
+        get => _numberGeneratorParameter.IntervalInMillis;
+        set
+        {
+            _numberGeneratorParameter.IntervalInMillis = value;
             this.StateHasChanged();
         }
     }
