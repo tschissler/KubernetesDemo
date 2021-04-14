@@ -1,25 +1,27 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Dtos;
 
 namespace NumberGenerator
 {
     public class CallPrimeDecomposition
     {
-        private string _primeDecompositionServiceUrl;
+        private readonly string _primeDecompositionServiceUrl;
 
-        private ConcurrentBag<CallStatistic> _callStatistics;
+        private readonly ConcurrentBag<CallStatisticDto> _callStatistics;
 
         public CallPrimeDecomposition(string primeDecompositionServiceUrl)
         {
             _primeDecompositionServiceUrl = primeDecompositionServiceUrl;
-            _callStatistics = new ConcurrentBag<CallStatistic>();
+            _callStatistics = new ConcurrentBag<CallStatisticDto>();
         }
 
-        public IReadOnlyCollection<CallStatistic> CallStatistics => _callStatistics;
+        public IReadOnlyCollection<CallStatisticDto> CallStatistics => _callStatistics;
 
         public async Task Call(long number)
         {
@@ -29,17 +31,15 @@ namespace NumberGenerator
             var responseMessage = await client.GetAsync($"{_primeDecompositionServiceUrl}?number={number}");
             stopwatch.Stop();
             var result = await responseMessage.Content.ReadFromJsonAsync<ResultDto>();
-            _callStatistics.Add(new CallStatistic
+            if (result != null)
             {
-                DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
-                Number = number,
-                Result = result.Result.ToArray()
-            });
+                _callStatistics.Add(new CallStatisticDto(stopwatch.ElapsedMilliseconds, number, result.Result.ToArray()));
+            }
         }
 
-        private class ResultDto
+        public void Reset()
         {
-            public List<long> Result { get; set; }
+            _callStatistics.Clear();
         }
     }
 }

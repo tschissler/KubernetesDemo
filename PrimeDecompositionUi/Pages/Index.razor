@@ -1,54 +1,87 @@
 ﻿@page "/"
 @using PrimeDecompositionUi.Data
-@using System.Threading
-@using System.Timers
+@using System.Net.Http.Json
+@using Dtos
 
 @inject HttpClient httpClient
 
 <h1>Enter Parameter for Prime Decomposition</h1>
-<EditForm Model="@numberGeneratorParameter">
+<EditForm Model="@_numberGeneratorParameter">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="m-4">
         <label for="maxnumber">Max number:</label>
         <br/>
-        <InputNumber class="text-xl-center" @bind-Value="numberGeneratorParameter.MaxNumber" id="maxnumber"/>
+        <InputNumber class="text-xl-center" @bind-Value="_numberGeneratorParameter.MaxNumber" id="maxnumber" disabled="@_running" />
     </div>
     <div class="m-4">
         <label for="intervalinmillis">Interval in Milliseconds:</label>
         <br/>
-        <InputNumber class="text-xl-center" @bind-Value="numberGeneratorParameter.IntervalInMillis" id="intervalinmillis"/>
+        <InputNumber class="text-xl-center" @bind-Value="_numberGeneratorParameter.IntervalInMillis" id="intervalinmillis" disabled="@_running" />
     </div>
 </EditForm>
 <div class="m-4">
-    <button class="btn-lg" type="button" @onclick="Start">Start</button>
-    <button class="btn-lg" type="button" @onclick="Stop">Stop</button>
-    <button class="btn-lg" type="button" @onclick="Stats">Update stats</button>
+    <button class="btn-lg" type="button" @onclick="Start" disabled="@_running">Start</button>
+    <button class="btn-lg" type="button" @onclick="Stop" disabled="@(!_running)">Stop</button>
+    <button class="btn-lg" type="button" @onclick="ResetStats" disabled="@(!Statistics.Any())">Reset stats</button>
 </div>
 <div>
-    @TheStats
+    <ul>
+        @foreach (var stat in Statistics)
+        {
+            <li>@stat.Number = @string.Join(" * ", stat.Result) (@stat.DurationInMilliseconds ms)</li>
+        }
+    </ul>
 </div>
 @code
 {
-    private readonly NumberGeneratorParameter numberGeneratorParameter = new();
-    
-    private string TheStats { get; set; }
+    private readonly NumberGeneratorParameter _numberGeneratorParameter = new();
 
-    private string Url = Environment.GetEnvironmentVariable("NUMBER_GENERATOR_URL");
+    private List<CallStatisticDto> Statistics { get; set; } = new();
+
+    private readonly string _url = Environment.GetEnvironmentVariable("NUMBER_GENERATOR_URL");
+
+    private bool _running = false;
+
+    private System.Timers.Timer _timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await UpdateStats();
+    }
 
     private async Task Start()
     {
-        await httpClient.GetAsync($"{Url}/start?max={numberGeneratorParameter.MaxNumber}&interval={numberGeneratorParameter.IntervalInMillis}");
+        if (_running)
+        {
+            return;
+        }
+        
+        await httpClient.GetAsync($"{_url}/start?max={_numberGeneratorParameter.MaxNumber}&interval={_numberGeneratorParameter.IntervalInMillis}");
+        _running = true;
+        _timer = new System.Timers.Timer(500);
+        _timer.Elapsed += async (_, _) => await UpdateStats();
+        _timer.Start();
     }
 
-    private async Task Stop()
+    private Task Stop()
     {
-        await httpClient.GetAsync($"{Url}/stop");
+        _running = false;
+        _timer.Stop();
+        return httpClient.GetAsync($"{_url}/stop");
     }
 
-    private async Task Stats()
+    private async Task UpdateStats()
     {
-        var response = await httpClient.GetAsync($"{Url}/stats");
-        TheStats = await response.Content.ReadAsStringAsync();
+        var response = await httpClient.GetAsync($"{_url}/stats");
+        Statistics = await response.Content.ReadFromJsonAsync<List<CallStatisticDto>>();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ResetStats()
+    {
+        await httpClient.GetAsync($"{_url}/reset");
+        await UpdateStats();
     }
 }

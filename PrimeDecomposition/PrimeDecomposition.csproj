@@ -11,5 +11,8 @@
   <ItemGroup>
     <PackageReference Include="FeatherHttp" Version="0.1.82-alpha.g7c8518a220" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dtos\Dtos.csproj" />
+  </ItemGroup>
 </Project>
 

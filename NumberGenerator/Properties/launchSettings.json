@@ -12,7 +12,7 @@
     "Local": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5001/start",
+      "launchUrl": "http://localhost:5001/stats",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "PRIME_DECOMPOSITION_URL": "http://localhost:5000"

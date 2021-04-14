@@ -1,4 +1,5 @@
 ﻿using System;
+using Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using NumberGenerator;
@@ -18,7 +19,7 @@ app.MapGet("/start",
         generatedNumbers.Subscribe(x => caller.Call(x));
 #pragma warning restore 4014
         http.Response.ContentType = "application/json";
-        await http.Response.WriteAsync(@"{""status"":""running""}");
+        await http.Response.WriteAsJsonAsync(new StatusDto("ok"));
     });
 
 app.MapGet("/stop",
@@ -26,7 +27,7 @@ app.MapGet("/stop",
     {
         generator.Stop();
         http.Response.ContentType = "application/json";
-        await http.Response.WriteAsync(@"{""status"":""stopped""}");
+        await http.Response.WriteAsJsonAsync(new StatusDto("stopped"));
     });
 
 app.MapGet("/stats",
@@ -36,11 +37,19 @@ app.MapGet("/stats",
         await http.Response.WriteAsJsonAsync(caller.CallStatistics);
     });
 
+app.MapGet("/reset",
+    async http =>
+    {
+        caller.Reset();
+        http.Response.ContentType = "application/json";
+        await http.Response.WriteAsJsonAsync(new StatusDto("ok"));
+    });
+
 app.MapGet("/health",
     async http =>
     {
         http.Response.ContentType = "application/json";
-        await http.Response.WriteAsync(@"{""status"":""ok""}");
+        await http.Response.WriteAsJsonAsync(new StatusDto("ok"));
     });
 
 await app.RunAsync();

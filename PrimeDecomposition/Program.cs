@@ -1,3 +1,4 @@
+using Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using PrimeDecomposition;
@@ -9,14 +10,14 @@ async http =>
 {
     var factors = long.Parse(http.Request.Query["number"]);
     http.Response.ContentType = "application/json";
-    await http.Response.WriteAsync($@"{{""result"":[{string.Join(",", Calculator.PrimeDecompositionCalc(factors))}]}}");
+    await http.Response.WriteAsJsonAsync(new ResultDto(Calculator.PrimeDecompositionCalc(factors)));
 });
 
 app.MapGet("/health",
     async http =>
     {
         http.Response.ContentType = "application/json";
-        await http.Response.WriteAsync(@"{""status"":""ok""}");
+        await http.Response.WriteAsJsonAsync(new StatusDto("ok"));
     });
 
 await app.RunAsync();

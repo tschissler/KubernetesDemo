@@ -13,4 +13,8 @@
     <PackageReference Include="FeatherHttp" Version="0.1.82-alpha.g7c8518a220" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dtos\Dtos.csproj" />
+  </ItemGroup>
 </Project>
