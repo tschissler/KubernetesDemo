@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: prime-decomposition-ui
-          image: prime-decomposition-ui
+          image: a1:32000/primedecompositionui:1.0
           imagePullPolicy: IfNotPresent
           env:
             - name: ASPNETCORE_ENVIRONMENT

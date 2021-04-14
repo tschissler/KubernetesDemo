@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: number-generator
-          image: number-generator
+          image: a1:32000/numbergenerator:1.0
           imagePullPolicy: IfNotPresent
           env:
             - name: ASPNETCORE_ENVIRONMENT

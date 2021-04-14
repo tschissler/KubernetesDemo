@@ -13,11 +13,9 @@ https://microk8s.io/docs/addon-dashboard
 microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
 ```
 
-### Install and configure kubectl on another PI
-Install kubectl:
+### Install and configure kubectl on Head
 ```
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm/kubectl"
-
 mkdir -p ~/bin
 mv kubectl ~/bin
 chmod a+x ~/bin/kubectl
@@ -69,13 +67,11 @@ df -h
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
-Register our custom Portainer registry with Microk8s:
+Register our custom Portainer registry with Microk8s on a1/a2/a3:
 ```
 vi /var/snap/microk8s/current/args/containerd-template.toml
 ```
-
 and add:
-
 ```
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors."a1:32000"]
         endpoint = ["http://a1:32000"]
@@ -83,7 +79,16 @@ and add:
 
 at the end of the file.
 
+## Push the images into registry
+On Head:
+```
+git clone https://github.com/tschissler/KubernetesDemo.git
+cd KubernetesDemo
+./build-and-push-images-on-head.sh
+```
+
 ## Let pods run
+On Head:
 ```
 git clone https://github.com/tschissler/KubernetesDemo.git
 cd KubernetesDemo/.k8s
