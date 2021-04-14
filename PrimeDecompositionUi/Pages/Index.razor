@@ -1,8 +1,12 @@
 ﻿@page "/"
+@using System.Net.Http
 @using PrimeDecompositionUi.Data
 @using System.Net.Http.Json
 @using Dtos
 @using MatBlazor
+@using Plotly.Blazor
+@using Plotly.Blazor.LayoutLib
+@using Plotly.Blazor.Traces
 
 @inject HttpClient httpClient
 
@@ -57,7 +61,9 @@
     <button class="btn-lg" type="button" @onclick="Stop" disabled="@(!_running)">Stop</button>
     <button class="btn-lg" type="button" @onclick="ResetStats" disabled="@(!Statistics.Any())">Reset stats</button>
 </div>
-<div>
+<div class="container">
+    <div class="row">
+<div class="col-6">
     <ul>
         @foreach (var stat in Statistics)
         {
@@ -65,8 +71,43 @@
         }
     </ul>
 </div>
+<div class="col-6">
+            <PlotlyChart Id="TestId" Config="config" Layout="layout" Data="data" @ref="chart"/>
+        </div>
+    </div>
+</div>
+
 @code
 {
+    PlotlyChart chart;
+
+    Config config = new Config
+    {
+        Responsive = true
+    };
+
+    Layout layout = new Layout
+    {
+        Title = new Title
+        {
+            Text = "Average Calculation Times"
+        },
+        BarMode = BarModeEnum.Overlay,
+        Height = 500
+    };
+
+    List<ITrace> data = new List<ITrace>
+    {
+        new Bar
+        {
+            X = new List<object> {0},
+            Y = new List<object> {0}
+        }
+    };
+
+    int lastConsideredIndexForAverage = 0;
+    int chart_x = 1;
+
     private long maxVal
     {
         get => _numberGeneratorParameter.MaxNumber;
@@ -100,8 +141,13 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await UpdateStats();
     }
+
+@*    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        UpdateStats().Wait();
+        return base.OnAfterRenderAsync(firstRender);
+    }*@
 
     private void OnSliderChanged(long value)
     {
@@ -134,11 +180,29 @@
         var response = await httpClient.GetAsync($"{_url}/stats");
         Statistics = await response.Content.ReadFromJsonAsync<List<CallStatisticDto>>();
         await InvokeAsync(StateHasChanged);
+        
+        if (Statistics.Count >= lastConsideredIndexForAverage + 10)
+        {
+            if (!(chart.Data.FirstOrDefault() is Bar bar)) return;
+
+            var y = Statistics.Skip(lastConsideredIndexForAverage).Average(i => i.DurationInMilliseconds);
+            await chart.PrependTrace(chart_x, y, data.IndexOf(bar));
+
+            lastConsideredIndexForAverage = Statistics.Count;
+            chart_x++;
+        }
     }
 
     private async Task ResetStats()
     {
         await httpClient.GetAsync($"{_url}/reset");
         await UpdateStats();
+        lastConsideredIndexForAverage = 0;
+        chart_x = 1;
+
+        if (!(chart.Data.FirstOrDefault() is Bar bar)) return;
+        bar.X.Clear();
+        bar.Y.Clear();
+        chart.React();
     }
 }
