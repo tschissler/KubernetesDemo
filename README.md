@@ -67,6 +67,15 @@ df -h
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
+Install docker-compose on head:
+```bash
+sudo apt-get install libffi-dev libssl-dev
+sudo apt install python3-dev
+sudo apt-get install -y python3 python3-pip
+
+sudo pip3 install docker-compose
+```
+
 Register our custom Portainer registry with Microk8s on a1/a2/a3:
 ```
 vi /var/snap/microk8s/current/args/containerd-template.toml
