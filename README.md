@@ -85,6 +85,13 @@ and add:
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors."a1:32000"]
         endpoint = ["http://a1:32000"]
 ```
+To be able to push to the repo from a docker client, you need to add the repo as an insecure repo.
+Under Windows, open Docker UI => Settings => Docker Engine. Under Linux edit (or create) `/etc/docker/daemon.json`:
+```json
+{
+  "insecure-registries": ["a1:32000"]
+}
+```
 
 at the end of the file.
 
