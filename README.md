@@ -76,6 +76,13 @@ sudo apt-get install -y python3 python3-pip
 sudo pip3 install docker-compose
 ```
 
+You have to update `libseccomp` manually as it will otherwise throw an error when you run apt update within a container.
+This problem also fixed the issue that the `dotnet`command did not work in container for .NET6,
+```bash
+curl http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.5.1-1_armhf.deb --output libseccomp2_2.5.1-1_armhf.deb
+sudo dpkg -i libseccomp2_2.5.1-1_armhf.deb
+```
+
 Register our custom Portainer registry with Microk8s on a1/a2/a3:
 ```
 vi /var/snap/microk8s/current/args/containerd-template.toml
