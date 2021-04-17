@@ -5,7 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Data\NewFile.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="MatBlazor" Version="2.9.0-develop-042" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0-preview.3.21201.13" />
       <PackageReference Include="Plotly.Blazor" Version="2.0.0" />
     </ItemGroup>
 

@@ -10,18 +10,21 @@ namespace NumberGenerator
         
         public IObservable<long> Generate(long max, long intervalInMilliseconds)
         {
+            IntervalInMilliseconds = intervalInMilliseconds;
             _running = true;
             var subject = new Subject<long>();
-            Start(subject, max, intervalInMilliseconds);
+            Start(subject, max);
             return subject;
         }
+
+        public long IntervalInMilliseconds { set; get; }
 
         public void Stop()
         {
             _running = false;
         }
 
-        private void Start(IObserver<long> subject, long max, long intervalInMilliseconds)
+        private void Start(IObserver<long> subject, long max)
         {
             Task.Run(async () =>
             {
@@ -29,7 +32,7 @@ namespace NumberGenerator
                 while (_running)
                 {
                     subject.OnNext(LongRandom(2, max, rand));
-                    await Task.Delay(TimeSpan.FromMilliseconds(intervalInMilliseconds));
+                    await Task.Delay(TimeSpan.FromMilliseconds(IntervalInMilliseconds));
                 }
                 
                 subject.OnCompleted();

@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="FeatherHttp" Version="0.1.82-alpha.g7c8518a220" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00839" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
