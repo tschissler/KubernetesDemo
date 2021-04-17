@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace NumberGenerator
 {
@@ -10,13 +12,25 @@ namespace NumberGenerator
 
         public CallPrimeDecomposition(string primeDecompositionServiceUrl)
         {
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient
+            {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
             _primeDecompositionServiceUrl = primeDecompositionServiceUrl;
         }
 
-        public Task Call(long number)
+        public async Task<bool> Call(long number)
         {
-            return _httpClient.GetAsync($"{_primeDecompositionServiceUrl}?number={number}");
+            try
+            {
+                await _httpClient.GetAsync($"{_primeDecompositionServiceUrl}?number={number}");
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Request to Prime Decomposition failed");
+                return false;
+            }
         }
     }
 }

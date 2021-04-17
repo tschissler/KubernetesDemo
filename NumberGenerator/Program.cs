@@ -49,8 +49,10 @@ app.MapGet("/start",
         var caller = new CallPrimeDecomposition(Environment.GetEnvironmentVariable("PRIME_DECOMPOSITION_URL"));
         generatedNumbers.Subscribe(async x =>
         {
-            await caller.Call(x);
-            statistics.Increment();
+            if (await caller.Call(x))
+            {
+                statistics.Increment();
+            }
         });
         timer.Start();
 #pragma warning restore 4014
