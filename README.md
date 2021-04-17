@@ -67,6 +67,22 @@ df -h
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
+Install docker-compose on head:
+```bash
+sudo apt-get install libffi-dev libssl-dev
+sudo apt install python3-dev
+sudo apt-get install -y python3 python3-pip
+
+sudo pip3 install docker-compose
+```
+
+You have to update `libseccomp` manually as it will otherwise throw an error when you run apt update within a container.
+This problem also fixed the issue that the `dotnet`command did not work in container for .NET6,
+```bash
+curl http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.5.1-1_armhf.deb --output libseccomp2_2.5.1-1_armhf.deb
+sudo dpkg -i libseccomp2_2.5.1-1_armhf.deb
+```
+
 Register our custom Portainer registry with Microk8s on a1/a2/a3:
 ```
 vi /var/snap/microk8s/current/args/containerd-template.toml
@@ -75,6 +91,13 @@ and add:
 ```
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors."a1:32000"]
         endpoint = ["http://a1:32000"]
+```
+To be able to push to the repo from a docker client, you need to add the repo as an insecure repo.
+Under Windows, open Docker UI => Settings => Docker Engine. Under Linux edit (or create) `/etc/docker/daemon.json`:
+```json
+{
+  "insecure-registries": ["a1:32000"]
+}
 ```
 
 at the end of the file.

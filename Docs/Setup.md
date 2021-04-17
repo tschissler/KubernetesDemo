@@ -18,12 +18,11 @@ sudo usermod -aG sudo k8suser
 ```
 8. Rename hostname
 
-The hostname must be lowercase
+The hostname `<name>` must be lowercase
 ```bash
-sudo nano /etc/hostname
-sudo hostname -F /etc/hostname
+sudo hostnamectl set-hostname <name>
 ```
-9. Enable c-groups
+9. Enable c-groups as precondition for microk8s
 ```bash
 sudo nano /boot/firmware/cmdline.txt
 ```
