@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.31025.218
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeDecomposition", "PrimeDecomposition\PrimeDecomposition.csproj", "{70524860-FB3F-4E7D-9DE0-94D126A32E16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeDecompositionTests", "PrimeDecompositionTests\PrimeDecompositionTests.csproj", "{62E27363-3DA9-4D03-A01B-D12AE1E1D2E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeDecompositionTests", "PrimeDecompositionTests\PrimeDecompositionTests.csproj", "{62E27363-3DA9-4D03-A01B-D12AE1E1D2E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberGenerator", "NumberGenerator\NumberGenerator.csproj", "{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumberGenerator", "NumberGenerator\NumberGenerator.csproj", "{9A1C4AAF-DA16-4E27-89E1-7DB5FB7CE81D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeDecompositionUi", "PrimeDecompositionUi\PrimeDecompositionUi.csproj", "{D7233970-3D57-4D81-8CD3-017FB5E3438E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeDecompositionUi", "PrimeDecompositionUi\PrimeDecompositionUi.csproj", "{D7233970-3D57-4D81-8CD3-017FB5E3438E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dtos", "Dtos\Dtos.csproj", "{DC5D6606-9A61-47CB-97C6-DE06965398A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dtos", "Dtos\Dtos.csproj", "{DC5D6606-9A61-47CB-97C6-DE06965398A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
