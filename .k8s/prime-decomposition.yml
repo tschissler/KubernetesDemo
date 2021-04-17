@@ -35,9 +35,9 @@ spec:
               path: /health
               port: 80
             initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 20
-            failureThreshold: 1
+            timeoutSeconds: 60
+            periodSeconds: 60
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
