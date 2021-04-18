@@ -55,11 +55,11 @@ command you can copy over to one leaf node to join the cluster. Be aware that yo
 microk8s.enable dashboard dns metrics-server portainer registry
 ```
 
-Register our custom Portainer registry with Microk8s, so execute this on every cluster node:
+Register our custom Portainer registry with Microk8s, so execute this *on every* cluster node:
 ```bash
 sudo nano /var/snap/microk8s/current/args/containerd-template.toml
 ```
-and add:
+and add in the end of the file:
 ```
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors."<cluster_ip>:32000"]
         endpoint = ["http://<cluster_ip>:32000"]
@@ -70,6 +70,8 @@ Restart the cluster for the changes to take effect:
 microk8s.stop
 microk8s.start
 ```
+Again, you have to do this on every node.
+
 More information about the private registry:
 * https://microk8s.io/docs/registry-built-in
 * https://microk8s.io/docs/registry-private
