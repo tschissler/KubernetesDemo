@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: number-generator
-          image: a1:32000/numbergenerator:1.4
+          image: a1:32000/numbergenerator:1.5
           imagePullPolicy: IfNotPresent
           env:
             - name: ASPNETCORE_ENVIRONMENT
@@ -33,13 +33,12 @@ spec:
           ports:
             - containerPort: 80
           livenessProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
               port: 80
             initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 20
-            failureThreshold: 1
+            timeoutSeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health

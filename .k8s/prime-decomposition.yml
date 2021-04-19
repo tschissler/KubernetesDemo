@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: prime-decomposition
-          image: a1:32000/primedecomposition:1.4
+          image: a1:32000/primedecomposition:1.5
           imagePullPolicy: IfNotPresent
           env:
             - name: ASPNETCORE_ENVIRONMENT
@@ -31,12 +31,11 @@ spec:
           ports:
             - containerPort: 80
           livenessProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
               port: 80
             initialDelaySeconds: 30
-            timeoutSeconds: 60
-            periodSeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 10
             failureThreshold: 3
           readinessProbe:
             httpGet:

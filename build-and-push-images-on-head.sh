@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=1.4
+VERSION=1.5
 CLUSTERNAME=a1
 sudo docker build -t $CLUSTERNAME:32000/primedecomposition:$VERSION -f PrimeDecomposition/Dockerfile .
 sudo docker build -t $CLUSTERNAME:32000/numbergenerator:$VERSION -f NumberGenerator/Dockerfile .
