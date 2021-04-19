@@ -63,15 +63,7 @@
 </div>
 <div class="container">
     <div class="row">
-<div class="col-6">
-    <ul>
-        @foreach (var stat in Statistics)
-        {
-            <li>@stat.Number = @string.Join(" * ", stat.Result) (@stat.DurationInMilliseconds ms)</li>
-        }
-    </ul>
-</div>
-<div class="col-6">
+<div class="col">
             <PlotlyChart Id="TestId" Config="config" Layout="layout" Data="data" @ref="chart"/>
         </div>
     </div>
@@ -91,7 +83,7 @@
     {
         Title = new Title
         {
-            Text = "Average Calculation Times"
+            Text = "Number of calculations per period (10s)"
         },
         BarMode = BarModeEnum.Overlay,
         Height = 500
@@ -168,12 +160,6 @@
     {
         await hubConnection.DisposeAsync();
     }
-
-@*    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        //UpdateStats().Wait();
-        return base.OnAfterRenderAsync(firstRender);
-    }*@
 
     private void OnSliderChanged(long value)
     {
