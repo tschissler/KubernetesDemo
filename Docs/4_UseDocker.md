@@ -25,6 +25,7 @@ Execute the following commands on the _Head_.
     images from dockerhub, a public repository for docker images. No worries, next time it will be much faster.
     
     The result of this operation should loook something like this.
+
     ![image](https://user-images.githubusercontent.com/11467601/115914576-6c971600-a472-11eb-9fd3-83b023593bf8.png)
 
     This command builds a docker image which we tag 'primedecompservice' to refer to it later instead of having to fiddle with IDs.
@@ -60,19 +61,19 @@ code ~/KubernetesDemo/PrimeDecomposition/Dockerfile
 ```
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-COPY Dtos/ /src/Dtos/
-COPY PrimeDecomposition/ /src/PrimeDecomposition/
-WORKDIR /src/PrimeDecomposition
-RUN dotnet restore
-RUN dotnet publish "PrimeDecomposition.csproj" -c Release -o /app
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
-WORKDIR /app
-COPY --from=build /app .
-ENV ASPNETCORE_URLS="http://+:80"
-EXPOSE 80
-ENTRYPOINT [ "dotnet", "PrimeDecomposition.dll" ]
+01  FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+02  COPY Dtos/ /src/Dtos/
+03  COPY PrimeDecomposition/ /src/PrimeDecomposition/
+04  WORKDIR /src/PrimeDecomposition
+05  RUN dotnet restore
+06  RUN dotnet publish "PrimeDecomposition.csproj" -c Release -o /app
+07  
+08  FROM mcr.microsoft.com/dotnet/aspnet:5.0
+09  WORKDIR /app
+10  COPY --from=build /app .
+11  ENV ASPNETCORE_URLS="http://+:80"
+12  EXPOSE 80
+13  ENTRYPOINT [ "dotnet", "PrimeDecomposition.dll" ]
 ```
 
 Lines 1-6 are describing the build process. In line 1 the image (which by default is pulled from dockerhub.io, 
