@@ -21,7 +21,8 @@ Execute the following commands on the _Head_.
     docker build -f PrimeDecomposition/Dockerfile -t primedecompservice .
     ```
     Make sure you do not miss the dot in the end as it specifies the current folder as the context for the whole build operation. 
-    The docker command can only access files within this context.
+    The docker command can only access files within this context. The operation can take a bit if it runs for the first time as it downloads some 
+    images from dockerhub, a public repository for docker images. No worries, next time it will be much faster.
     
     The result of this operation should loook something like this.
     ![image](https://user-images.githubusercontent.com/11467601/115914576-6c971600-a472-11eb-9fd3-83b023593bf8.png)
@@ -88,7 +89,7 @@ when the container is starting up.
 ## How to create and run multiple containers
 OK, that was easy, but our application consists of 3 different services. Obviously we could do the same thing for each service, 
 but wouldn't it be cool if we could easily control these containers together? Here comes docker-compose to our rescue.
-Fortunately there is already a docker-compos.yml file in the root folder of the repository. Again, let's first try it and then look into it.
+Fortunately there is already a `docker-compos.yml` file in the root folder of the repository. Again, let's first try it and then look into it.
 
 ```bash
 cd ~/KubernetesDemo
@@ -96,6 +97,75 @@ docker-compose up
 ```
 This now creates images for each of the 3 services and then starts a container for each. You can access the result in a browser on the head again:
 `http://localhost:4300`
+
+Not bad, not bad at all. 
+
+With Docker you have no longer worry about the right environment, setting ports, environment variables etc. This is now part of the source code repository. 
+This is what we call "Infrastructure as code". No need to create backups of the environments you run your applications in. These can easily be recreated, even on a different hardware. You just have to backup your data.
+
+So let's have a look at the `dockercompose.yml` because there is some nice magic to be discovered.
+
+``´yaml
+version: "3.7"
+
+services:
+  prime-decomposition:
+    container_name: prime-decomposition
+    image: "prime-decomposition"
+    build:
+      context: .
+      dockerfile: ./PrimeDecomposition/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    expose:
+      - "80"
+    networks:
+      - k8sdemo
+
+  number-generator:
+    container_name: number-generator
+    image: "number-generator"
+    build:
+      context: .
+      dockerfile: ./NumberGenerator/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - PRIME_DECOMPOSITION_URL=http://prime-decomposition
+    expose:
+      - "80"
+    networks:
+      - k8sdemo
+
+  prime-decomposition-ui:
+    container_name: prime-decomposition-ui
+    image: "prime-decomposition-ui"
+    build:
+      context: .
+      dockerfile: ./PrimeDecompositionUi/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - NUMBER_GENERATOR_URL=http://number-generator
+    expose:
+      - "80"
+    ports:
+      - "4300:80"
+    networks:
+      - k8sdemo
+        
+networks:
+  k8sdemo:
+```
+
+
+
+
+
+
+
+
+
+
+
 
 ## Push all images into registry
 This step is necessary so that the K8s cluster can find the images. For that, we build the images on the _Head_ and push them into the internal Container Registry running on the cluster.
