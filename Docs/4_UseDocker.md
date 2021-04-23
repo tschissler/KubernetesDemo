@@ -105,7 +105,7 @@ This is what we call "Infrastructure as code". No need to create backups of the 
 
 So let's have a look at the `dockercompose.yml` because there is some nice magic to be discovered.
 
-```javascript=
+```yml
 version: "3.7"
 
 services:
