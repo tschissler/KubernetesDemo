@@ -22,8 +22,11 @@ Execute the following commands on the _Head_.
     ```
     Make sure you do not miss the dot in the end as it specifies the current folder as the context for the whole build operation. 
     The docker command can only access files within this context.
+    
+    The result of this operation should loook something like this.
+    ![image](https://user-images.githubusercontent.com/11467601/115914576-6c971600-a472-11eb-9fd3-83b023593bf8.png)
 
-    This command builds a docker image which we tag 'primedecompservice' to refer to it later instead of haqving to fiddle with IDs.
+    This command builds a docker image which we tag 'primedecompservice' to refer to it later instead of having to fiddle with IDs.
     You can easily list all available images:
     ```bash
     k8suser@headb:~/KubernetesDemo $ docker images
@@ -34,6 +37,7 @@ Execute the following commands on the _Head_.
     mcr.microsoft.com/dotnet/aspnet   5.0       0d95d6c17320   46 hours ago         174MB
     k8suser@headb:~/KubernetesDemo $ 
     ```
+    Here you can see that we have some dotnet images provided by microsoft. The image we just created is based on the last one.
 
 1. You can now run a container using this image.
     ```bash
@@ -43,7 +47,7 @@ Execute the following commands on the _Head_.
 This will run our service within the container. We are exposing the port 80 which is used by our service within the container to the local port 8080.
 ![Screenshot2](Screenshot2.png)
 
-You can now access the service in your browser: http://localhost:8080/?number=52
+You can now access the service in a browser on the head node: http://localhost:8080/?number=52
 
 That was easy and each time the service need changes in the environment (components, frameworks, environmentvariables etc.) this can be 
 considered in the Dockerfile and your can easily create a new container with all these requirements.
@@ -81,12 +85,17 @@ runtime and not the full sdk. In line 10 we copy the files from our build contai
 variable while line 12 defines the port to expose to the external world. Finally line 13 defines the command to be executed 
 when the container is starting up.
 
-## Let all pods run on the _Head_ (directly on Docker)
+## How to create and run multiple containers
+OK, that was easy, but our application consists of 3 different services. Obviously we could do the same thing for each service, 
+but wouldn't it be cool if we could easily control these containers together? Here comes docker-compose to our rescue.
+Fortunately there is already a docker-compos.yml file in the root folder of the repository. Again, let's first try it and then look into it.
+
 ```bash
 cd ~/KubernetesDemo
 docker-compose up
 ```
-Open a browser with `http://<head_ip>:4300`
+This now creates images for each of the 3 services and then starts a container for each. You can access the result in a browser on the head again:
+`http://localhost:4300`
 
 ## Push all images into registry
 This step is necessary so that the K8s cluster can find the images. For that, we build the images on the _Head_ and push them into the internal Container Registry running on the cluster.
