@@ -35,3 +35,19 @@ https://www.raspberrypi.org/software/
     sudo apt upgrade
     sudo apt install net-tools
     ```
+1. There is one more setting you have to make before we can install microk8s. We need to enable c-groups so the kubelet will work out of the box. To do this you need to modify the configuration file /boot/firmware/cmdline.txt:
+    ```bash
+    sudo nano /boot/firmware/cmdline.txt
+    ```
+    And add the following options:
+    `cgroup_enable=memory cgroup_memory=1 `
+    
+    The file content should be similar to
+    ```
+    cgroup_enable=memory cgroup_memory=1 net.ifnames=0 dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=LABEL=writable rootfstype=ext4 elevator=deadline rootwait fixrtc
+    ```
+
+    Then reboot
+    ```bash
+    sudo reboot
+    ```
