@@ -6,40 +6,40 @@ Execute the following commands on the _Head_.
 
 1. Clone the repository for the application
     ```bash
-    git clone https://github.com/tschissler/KubernetesDemo.git
+    $ git clone https://github.com/tschissler/KubernetesDemo.git
     ```
 1. Try to run the PrimeDecomposition service
     ```bash
-    cd KubernetesDemo/PrimeDecomposition
-    dotnet run
+    $ cd KubernetesDemo/PrimeDecomposition
+    $ dotnet run
     ```
     This results in an error message as the .NET SDK is not installed on the machine.
+
     ![Screenshot1](Screenshot1.png)
-1. We could now install all the dependencies on the local computer to get the app compiling and running. But look, there is a Dockerfile in the current folder. Could we not just create a container and run the build and execution inside the container? We do not have to know much about the needed environment, everything is defined in the Dockerfile. Just try it out first, we will have a look at the file a bit later.
+1. We could now install all the dependencies on the local computer to get the app compiling and running. But look, there is a `Dockerfile` in the current folder. Could we not just create a container and run compiling and execution inside the container? We do not have to know much about the needed environment, everything is defined in the `Dockerfile`. Just try it out first, we will have a look at the file a bit later.
     ```bash
     cd ~/KubernetesDemo
     docker build -f PrimeDecomposition/Dockerfile -t primedecompservice .
     ```
     Make sure you do not miss the dot in the end as it specifies the current folder as the context for the whole build operation. 
     The docker command can only access files within this context. The operation can take a bit if it runs for the first time as it downloads some 
-    images from dockerhub, a public repository for docker images. No worries, next time it will be much faster.
+    images from _dockerhub_, a public repository for docker images. No worries, next time it will be much faster.
     
-    The result of this operation should loook something like this.
+    The result of this operation should look something like this:
 
     ![image](https://user-images.githubusercontent.com/11467601/115914576-6c971600-a472-11eb-9fd3-83b023593bf8.png)
 
-    This command builds a docker image which we tag 'primedecompservice' to refer to it later instead of having to fiddle with IDs.
+    That last command builds a docker image which we tag `primedecompservice` with `-t` to refer to it later instead of having to fiddle with IDs.
     You can easily list all available images:
     ```bash
-    k8suser@headb:~/KubernetesDemo $ docker images
+    $ docker images
     REPOSITORY                        TAG       IMAGE ID       CREATED              SIZE
     primedecompservice                latest    caf3d2255a9d   About a minute ago   174MB
     <none>                            <none>    00a7f1273284   About a minute ago   576MB
     mcr.microsoft.com/dotnet/sdk      5.0       e388c04f9eb3   46 hours ago         569MB
     mcr.microsoft.com/dotnet/aspnet   5.0       0d95d6c17320   46 hours ago         174MB
-    k8suser@headb:~/KubernetesDemo $ 
     ```
-    Here you can see that we have some dotnet images provided by microsoft. The image we just created is based on the last one.
+    Here you can see that we have some dotnet images provided by Microsoft. The image we just created is based on the last one.
 
 1. You can now run a container using this image.
     ```bash
@@ -47,6 +47,7 @@ Execute the following commands on the _Head_.
     ```
 
 This will run our service within the container. We are exposing the port 80 which is used by our service within the container to the local port 8080.
+
 ![Screenshot2](Screenshot2.png)
 
 You can now access the service in a browser on the head node: http://localhost:8080/?number=52
@@ -61,26 +62,26 @@ code ~/KubernetesDemo/PrimeDecomposition/Dockerfile
 ```
 
 ```dockerfile
-01  FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-02  COPY Dtos/ /src/Dtos/
-03  COPY PrimeDecomposition/ /src/PrimeDecomposition/
-04  WORKDIR /src/PrimeDecomposition
-05  RUN dotnet restore
-06  RUN dotnet publish "PrimeDecomposition.csproj" -c Release -o /app
-07  
-08  FROM mcr.microsoft.com/dotnet/aspnet:5.0
-09  WORKDIR /app
-10  COPY --from=build /app .
-11  ENV ASPNETCORE_URLS="http://+:80"
-12  EXPOSE 80
-13  ENTRYPOINT [ "dotnet", "PrimeDecomposition.dll" ]
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+COPY Dtos/ /src/Dtos/
+COPY PrimeDecomposition/ /src/PrimeDecomposition/
+WORKDIR /src/PrimeDecomposition
+RUN dotnet restore
+RUN dotnet publish "PrimeDecomposition.csproj" -c Release -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
+WORKDIR /app
+COPY --from=build /app .
+ENV ASPNETCORE_URLS="http://+:80"
+EXPOSE 80
+ENTRYPOINT [ "dotnet", "PrimeDecomposition.dll" ]
 ```
 
 Lines 1-6 are describing the build process. In line 1 the image (which by default is pulled from dockerhub.io, 
 a public repository for docker images) is defined and the container is referenced to as "build".
 Line 2 and 3 are copying files from the context into the container. Then we change in the folder and 
 run commands to build the service. Line 6 does a build and creates an output file (PrimeDecomposition.dll) that
-will be executed during runtime. The files will be stored in the /app folder.
+will be executed during runtime. The files will be stored in the `/app` folder.
 
 Lines 8-13 are describing the image that is created. Here we use a different image which is only including the dotnetcore 
 runtime and not the full sdk. In line 10 we copy the files from our build container into the image. Line 11 sets an environment 
@@ -157,7 +158,19 @@ networks:
   k8sdemo:
 ```
 
+First we define the 3 services of our application (`prime-decomposition`, `number-generator` and `prime-decomposition-ui`).
+For each service we define a name for the container and for the image (similar to the `-t` parameter). Then we use the 
+Dockerfiles we have used before. In the section `environment` we define environment variables. We define the port the 
+container exposes and the network it connects to. The network is defined at the bottom of the file. As all containers
+connect to the same network, they are able to communicate with each other. To isolate the containers, different networks
+can be used. 
 
+Also have a look at the `*_URL`-parameters in the `environment` section of the `number-generator` and the `prime-decomposition-ui` services.
+They use the name of another container in the URL. On the network we can use the container name for name resolution.
+Another interesting detail is in the `prime-decomposition-ui` service where you find the parameter `ports`. Here we route the 
+port 80 from inside the container to the external port 4300 or in other words, service from inside the container can now be 
+accesses via port 4300. The other containers have not defined any ports which means they are only reachable from inside the 
+network (in Docker), but not from the outside (the local host). That's really helpful from a security perspective.
 
 
 

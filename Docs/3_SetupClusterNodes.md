@@ -3,29 +3,20 @@ For the Kubernetes cluster we are going to use `microk8s` (https://microk8s.io/)
 
 Make sure that you ssh-ed into one of your cluster nodes and not running the following commands on your _Head_ node.
 
-## Prepare operating system
-Enable `c-groups` as precondition for microk8s:
-```bash
-sudo nano /boot/firmware/cmdline.txt
-```
-Add the following options at the beginning of the line (not in a new one, but on the same):
-```bash
-cgroup_enable=memory cgroup_memory=1
-```
-so that it looks like
-```
-cgroup_enable=memory cgroup_memory=1 net.ifnames=0...
-```
-
 ## Install `microk8s`
 You just need to run a single command:
   ```bash
   sudo snap install microk8s --classic
   ```
 
-You should run this command on all nodes, master and leafes.
+You should run this command on all 3 nodes.
 
-After the installation is finished, you can check the status:
+After the installation is finished, you can start the node with:
+  ```bash
+  sudo microk8s start
+  ```
+
+and check the status with:
   ```bash
   sudo microk8s status --wait-ready
   ```
@@ -48,7 +39,13 @@ One of your nodes now becomes the master node, the others become leaf nodes. Pic
   sudo microk8s.add-node
   ```
 This command will generate a connection string in the form of `<master_ip>:<port>/<token>` and will provide you with a 
-command you can copy over to one leaf node to join the cluster. Be aware that you have to create a new token for each node.
+command you can copy over to one leaf node to join the cluster. Be aware that you have to create a new token for each node
+but you can only add another leaf node after the first has connected successfully.
+
+You can list the registered nodes with
+  ```bash
+microk8s kubectl get nodes
+```
 
 ## Enable microk8s plugins
 ```bash
