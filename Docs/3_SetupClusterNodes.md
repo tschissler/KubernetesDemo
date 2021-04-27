@@ -33,6 +33,7 @@ If that is not the case try to run `sudo microk8s start` and then `sudo microk8s
 ![Screenshot3](Screenshot3.png)
 
 You can authorize the user to run microk8s without using sudo all the time, just to make your live a bit easier :-)
+You will have to log off and in again to make these changes apply.
 ```bash
 sudo usermod -a -G microk8s $USER
 sudo chown -f -R $USER ~/.kube
