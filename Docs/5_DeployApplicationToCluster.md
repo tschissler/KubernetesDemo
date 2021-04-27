@@ -35,10 +35,10 @@ There is a script available that helps with that.
 You can just look into the `build-and-push-images-on-head.sh` and update the `VERSION` to a new, higher version 
 and provide the name of your master node in `CLUSTERNAME`
 
-Then execute the script. Probybly you have to apply access rights before you can execute it.
+Then execute the script. Probably you have to apply access rights before you can execute it.
 
 ```bash
-kubectl get nodes
+chmod +rx build-and-push-images-on-head.sh
 ``` 
 
 We have already prepared some configuration files which we wil examine closer a bit later. Again just execute them to see what's happening.
