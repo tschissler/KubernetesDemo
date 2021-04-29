@@ -27,7 +27,7 @@ Let's list the nodes inb our cluster to check the configuration.
 kubectl get nodes
 ```
 
-![Screenshot_get_nodes](Screenshot_get_nodes.png)
+![Screenshot_get_Nodes](Screenshot_get_Nodes.png)
 
 
 ## Deploy applications
