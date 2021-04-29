@@ -95,13 +95,10 @@ More information about the private registry:
 ## Start the K8s dashboard
 The [microk8s dashboard addon](https://microk8s.io/docs/addon-dashboard) is a website for monitoring and controlling the K8s cluster. After enabling the addon it already runs in a container in the cluster and just needs to be assigend to a port on a cluster node to reach it:
 ```bash
-microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
+microk8s dashboard-proxy
 ```
 Now you can open the webpage `https://<node name>:10443` with the `<node name>` of the node where you started the port forwarding. 
-After ignoring the certificate warning, you have to authorize. The easiest way is to use a token. You can get the token by executing the following command on one of the cluster nodes:
-```bash
-microk8s.kubectl -n kube-system describe secret $(microk8s kubectl -n kube-system get secret | grep default-token | cut -d " " -f1)
-```
+After ignoring the certificate warning, you have to authorize. The easiest way is to use the token that was printed with the previous command.
 
-
+![Screenshot_Dashboard0](Screenshot_Dashboard0.png)
 
