@@ -2,7 +2,6 @@
   "profiles": {
     "PrimeDecomposition": {
       "commandName": "Project",
-      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       },

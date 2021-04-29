@@ -153,6 +153,20 @@
         });
 
         await hubConnection.StartAsync();
+
+        try
+        {
+            var response = await httpClient.GetAsync($"{_url}/getcurrentstate");
+            var state = await response.Content.ReadFromJsonAsync<FullStatusDto>();
+            _running = state.Status;
+            maxVal = state.CurrentMaxValue;
+            intervalVal = state.CurrentInterval;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
         await base.OnInitializedAsync();
     }
     

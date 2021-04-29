@@ -77,6 +77,12 @@ app.MapGet("/updateinterval",
         await http.Response.WriteAsJsonAsync(new StatusDto("ok"));
     });
 
+app.MapGet("/getcurrentstate",
+    async http =>
+    {
+        await http.Response.WriteAsJsonAsync(new FullStatusDto(generator.Running, generator.MaxValue, generator.IntervalInMilliseconds));
+    });
+
 app.MapGet("/health",
     async http =>
     {
