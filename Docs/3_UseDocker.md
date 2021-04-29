@@ -171,3 +171,8 @@ Another interesting detail is in the `prime-decomposition-ui` service where you 
 port 80 from inside the container to the external port 4300 or in other words, service from inside the container can now be 
 accesses via port 4300. The other containers have not defined any ports which means they are only reachable from inside the 
 network (in Docker), but not from the outside (the local host). That's really helpful from a security perspective.
+
+
+## Continue with setting up a Kubernetes cluster
+This is already great, but let's setup a Kubernetes cluster now to discover some of it's magic.
+Continue with document [4_SetupClusterNodes.md](./4_SetupClusterNodes.md)
