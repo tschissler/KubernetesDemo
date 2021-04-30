@@ -13,3 +13,21 @@ sudo docker push $CLUSTERNAME:32000/primedecompositionui:$VERSION
 ```
 
 Source: [Building Multi-Arch Images for Arm and x86 with Docker Desktop](https://www.docker.com/blog/multi-arch-images/)
+
+# Use remote docker host
+There are different ways to execute docker commands on a remote host
+
+1. Set the environment variable `DOCKER_HOST`
+```bash
+DOCKER_HOST=“ssh://user@remotehost” 
+```
+
+2. Use a docker context
+```bash
+docker context create <contextname> ‐‐docker “host=ssh://user@remotemachine”
+docker context ls
+docker context use <contextname>
+docker ps
+```
+
+Source: [How to deploy on remote Docker hosts with docker-compose](https://www.docker.com/blog/how-to-deploy-on-remote-docker-hosts-with-docker-compose/)
