@@ -10,7 +10,7 @@ Execute the following commands on the _Head_.
     ```
 1. Try to run the PrimeDecomposition service
     ```bash
-    $ cd KubernetesDemo/PrimeDecomposition
+    $ cd ~/KubernetesDemo/PrimeDecomposition
     $ dotnet run
     ```
     This results in an error message as the .NET SDK is not installed on the machine.
